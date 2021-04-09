@@ -15,41 +15,49 @@ public class OrderBy {
 		showList(boxes);
 	}
 	public static LinkedList<String> sortList(LinkedList<String> boxes){
-		for(int x= 0; x < boxes.size() - 1; x++) {
+		for(int x= 0; x < boxes.size() - 1 ; x++) {
 			for (int y = 1+x; y < boxes.size(); y++) {
-				if(isYOlder(boxes.get(y),boxes.get(x))) {
-				String tempOlder = boxes.get(y);
-				boxes.set(y,boxes.get(x));
-				boxes.set(x,tempOlder);
+				int intIsYOlder = isYOlder(boxes.get(y),boxes.get(x));
+				if(intIsYOlder == 1) {
+					String tempOlder = boxes.get(y);
+					boxes.set(y,boxes.get(x));
+					boxes.set(x,tempOlder);
 				}
+				if(intIsYOlder ==2) {
+						boxes.add(x, boxes.get(y));
+						boxes.remove(y+1);
+				}	
 		}
 	}
 		return boxes;
 	}
-	public static boolean isYOlder(String idy, String idx) {
+	//0 do nothing, 1 swap , 2 move to next position, 
+	public static int isYOlder(String idy, String idx) {
 		String[] ytemp = idy.split(" ");
 		String[] xtemp = idx.split(" ");
 		boolean newGenerationX = isNewGeneration(xtemp);
 		boolean newGenerationY = isNewGeneration(ytemp);
-		    if(newGenerationX && newGenerationY) 
-		    	return false;
-			if(newGenerationX && !newGenerationY)
-				return true;
+		    if(newGenerationX && newGenerationY)
+		    	return 0;
+			if(newGenerationX && !newGenerationY) {
+				
+				return 2;
+			}
 			if(!newGenerationX && newGenerationY)
-				return false;
+				return 0;
 			//old generation only
 			int alOlder = alphabeticallyHigher(ytemp, xtemp);
 			if(alOlder == 0) {
 				//tide breaker by id
 				if(isASCIIHigher(ytemp, xtemp))
-					return true;
+					return 1;
 				else
-					return false;
+					return 0;
 			}   
 			if (alOlder < 0) 
-					return true;
+					return 1;
 				else
-					return false;
+					return 0;
 	}
 	
 	// negative numbers comes first, 0 is equal and positive numbers comes after
